@@ -2,6 +2,8 @@
 
 Code, reference data, and manuscript source for Bhaskar Krishnamachari's [arXiv:2603.07435](https://arxiv.org/abs/2603.07435). This repository builds all twelve figures and the numerical values in Tables 3 and 4. The [compiled manuscript](paper/manuscript.pdf) uses the figure files in [paper/figures](paper/figures) and draws Figure 10 directly in LaTeX.
 
+The [proof companion](proofs/) gives a Lamport-style proof and a step-by-step audit for each of the ten numbered results.
+
 ## Build the figures
 
 Use Python 3.12 and pdfLaTeX with PGFPlots. The numerical environment is pinned in `requirements.txt`. Run the following in the repository root, preferably inside a virtual environment.
