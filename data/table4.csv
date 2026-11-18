@@ -1,0 +1,7 @@
+source,a,b,90th,95th,99th
+Standard normal,,,1.282,1.645,2.326
+IID biased,0.2,0.8,1.155,1.876,2.598
+Persistent unbiased,0.1,0.1,1.498,1.768,2.333
+Persistent biased,0.1,0.3,1.341,1.669,2.134
+Slowly mixing,0.02,0.08,1.708,2.006,2.143
+Anti-persistent,0.8,0.8,1.233,1.836,2.235
