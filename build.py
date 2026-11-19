@@ -1,4 +1,4 @@
-"""Build all twelve figures and Tables 3 and 4 in an empty output directory."""
+"""Build all thirteen figures and Tables 3 and 4 in an empty output directory."""
 
 import argparse
 import os
@@ -30,12 +30,14 @@ from figures import (
     write,
 )
 from model import critical, entropy, nu
+from overview import draw_overview
 from scipy.optimize import brentq
 from short_blocks import at_weight
 
 NAMES = [
     "construction",
     "regimes",
+    "overview",
     "support",
     "ladder",
     "shortblocks",
@@ -234,6 +236,7 @@ def main():
             stdout=transcript,
             check=True,
         )
+    draw_overview(out / "overview.pdf", six / "series-3.dat")
     shutil.copyfile(six / "figure10.pdf", out / "figure10.pdf")
     shutil.copyfile(six / "table4.csv", data / "table4.csv")
     print(f"Generated {len(NAMES)} PDFs in {out}")

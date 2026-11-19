@@ -1,4 +1,4 @@
-"""Recompute the long-block points in Figures 9 and 11 from the Markov law."""
+"""Recompute the long-block points in Figures 10 and 12 from the Markov law."""
 
 import argparse
 import csv
@@ -41,7 +41,7 @@ def run(job):
             problem = BlockProblem(p, k)
             _, result = problem.optimum(u, problem.initial(u))
         if abs(result["D_actual"] - d) > 3e-5 or result["column_violation"] > 1e-5:
-            raise ArithmeticError(f"Figure 9 point {index}: {result}")
+            raise ArithmeticError(f"Figure 10 point {index}: {result}")
     return dict(figure=name, index=index, p=p, K=k, D=d, **result)
 
 

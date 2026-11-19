@@ -115,7 +115,7 @@ def verify(build, solves):
         "Invalid enclosure",
     )
     print(
-        "Verified twelve figure PDFs, both numerical tables, the support ladder, varentropy, and both probability distributions."
+        "Verified thirteen figure PDFs, both numerical tables, the support ladder, varentropy, and both probability distributions."
     )
 
 

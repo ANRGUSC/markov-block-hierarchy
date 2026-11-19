@@ -1,4 +1,4 @@
-# Figure 10 and Table 4
+# Figure 11 and Table 4
 
 These files reproduce the six-source comparison in *A Block Hierarchy for Rate-Distortion and Dispersion of Binary Markov Sources*. Each calculation enumerates all stationary binary Markov words of length `K`, with Hamming distortion 0.10 per symbol. The parameters `a` and `b` are the probabilities of transitions from 0 to 1 and from 1 to 0, respectively.
 

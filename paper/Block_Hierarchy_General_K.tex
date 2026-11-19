@@ -94,12 +94,17 @@ Consider a single uninterrupted path of the Markov source. Its consecutive $K$-s
 The finite-block calculation depends on which words receive positive probability under the optimal reproduction law. These words form its \emph{support}. A \emph{branch} is an interval of distortion with the same support. On the \emph{full-support branch}, all reproduction words have positive probability. For symmetric persistent chains, the full-support thresholds decrease with block length to Gray's critical distortion $D_c$. Up to $D_c$ the entropy formula for the block rate holds at every length. Above $D_c$, longer blocks can lose support at a fixed distortion.
 
 \paragraph{Results.}
-For positively correlated two-symbol blocks we compute the complete rate and variance at any stationary bias. For symmetric three- and four-symbol blocks we identify the support changes and compute both quantities with at most a cubic equation or two scalar searches, respectively (Section~\ref{sec:two}). For larger blocks, one optimization gives both moments, and shorter blocks bound the rate and, for symmetric persistent sources, the variance (Sections~\ref{sec:general} and~\ref{sec:shortvariance}).
+Figure~\ref{fig:overview} traces the two quantities obtained from each block, the rate and the tilted-information variance, from short words to the limit of long blocks. For positively correlated two-symbol blocks we compute the complete rate and variance at any stationary bias. For symmetric three- and four-symbol blocks we identify the support changes and compute both quantities with at most a cubic equation or two scalar searches, respectively (Section~\ref{sec:two}). For larger blocks, one optimization gives both moments, and shorter blocks bound the rate and, for symmetric persistent sources, the variance (Sections~\ref{sec:general} and~\ref{sec:shortvariance}).
 
 Figure~\ref{fig:regimes} follows one symmetric source as the block length grows. At $D=0.05$, every block length lies below its full-support threshold, so the variance curve is exact. Theorem~\ref{thm:common} also establishes convergence beyond that common interval wherever $R$ is differentiable in the interior. Proposition~\ref{prop:converse} relates the low-distortion limit to coding a single path.
 
 \paragraph{Code, data, and proofs.}
-The plotting code for all twelve figures, the finite-block solver, and the numerical data are available at \url{https://github.com/ANRGUSC/markov-block-hierarchy}. The \href{https://github.com/ANRGUSC/markov-block-hierarchy/tree/main/proofs}{Lamport proof companion} gives step-by-step proofs of all ten numbered results and identifies the dependencies used to verify each one.
+The plotting code for all thirteen figures, the finite-block solver, and the numerical data are available at \url{https://github.com/ANRGUSC/markov-block-hierarchy}. The \href{https://github.com/ANRGUSC/markov-block-hierarchy/tree/main/proofs}{Lamport proof companion} gives step-by-step proofs of all ten numbered results and identifies the dependencies used to verify each one.
+
+\begin{figure}[!htbp]\centering
+\includegraphics[width=\linewidth]{figures/overview.pdf}
+\caption{The block hierarchy at a glance. The first two-symbol support threshold comes from \cite{itw}. The tensor calculation uses Blahut's binary Hamming kernel \cite[Cor.~7]{blahut} to evaluate the mean and variance of block tilted information $\jmath_K$ \cite{kv}. The plotted points are the symmetric persistent example from Figure~\ref{fig:talksix}.}\label{fig:overview}
+\end{figure}
 
 \paragraph{Relation to prior work.}
 This paper extends the workshop paper and presentation \cite{itw}. They introduced the hierarchy, identified the first two-symbol support change as a function of bias and persistence, and examined varentropy and finite-block numerical behavior.
@@ -378,7 +383,7 @@ On this branch, the total input probabilities of the constant, odd-weight, and w
 For $K=2,3,4$ the support of the optimal reproduction law led to explicit formulas for both moments. At larger $K$ there are two ways to obtain them. One can solve the $K$-symbol problem itself, exploiting the product structure of Hamming distortion. When this becomes too expensive, shorter blocks give a guaranteed interval for the rate and, for symmetric persistent sources, for the variance.
 
 \subsection{One optimization gives both moments}\label{sec:compute}
-Fix a positive binary transition matrix and $0<D<D_0$. The source assigns probabilities $P_K(x)$ to the $2^K$ words. At a trial multiplier $u\in(0,1)$, the Hamming matrix $A_u(x,y)=u^{d(x,y)}$ factors as
+Fix a positive binary transition matrix and $0<D<D_0$. The source assigns probabilities $P_K(x)$ to the $2^K$ words. At a trial multiplier $u\in(0,1)$, let $A_u(x,y)=u^{d(x,y)}$. Blahut's recursion for the binary Hamming matrix \cite[proof of Cor.~7]{blahut} gives the tensor factorization
 \[
  A_u=\begin{pmatrix}1&u\\ u&1\end{pmatrix}^{\otimes K}.
 \]
@@ -386,9 +391,9 @@ The optimum maximizes $\sum_x P_K(x)\ln (A_uq)(x)$ over reproduction probabiliti
 \[
  Z=A_u q,\qquad q_{\rm new}=q\odot A_u(P_K/Z),
 \]
-with elementwise multiplication and division. Each tensor multiplication visits the $K$ bit positions in turn. At a given position it replaces each pair of entries $(z_0,z_1)$ differing there by $(z_0+uz_1,uz_0+z_1)$. Each iteration therefore costs $O(K2^K)$ time and $O(2^K)$ storage. The Markov dependence enters through the weights $P_K$.
+with elementwise multiplication and division. Each tensor multiplication visits the $K$ bit positions in turn. At a given position it replaces each pair of entries $(z_0,z_1)$ differing there by $(z_0+uz_1,uz_0+z_1)$. A dense multiplication sums over $2^K$ reproduction words for each of $2^K$ source words, requiring $O(4^K)$ arithmetic operations. Applying the binary factors reduces the cost per Blahut--Arimoto iteration to $O(K2^K)$ operations and uses $O(2^K)$ storage. The Markov dependence enters through the weights $P_K$.
 
-The distortion constraint therefore selects the value of $u$ for which $\sum_x P_K(x)\,u\,\partial_u\ln Z(x)=KD$, holding the optimizing $q$ fixed in the derivative. At that solution let $\ell(x)=-\log_2 Z(x)$ and $\bar\ell=\sum_x P_K(x)\ell(x)$. Then
+The distortion constraint therefore selects the value of $u$ for which $\sum_x P_K(x)\,u\,\partial_u\ln Z(x)=KD$, holding the optimizing $q$ fixed in the derivative. At that solution the normalizers already determine the tilted information in \eqref{eq:j}, so its variance requires only a weighted sum over source words. Let $\ell(x)=-\log_2 Z(x)$ and $\bar\ell=\sum_x P_K(x)\ell(x)$. Then
 \begin{equation}
  \boxed{\quad r_K(D)=D\log_2u+\frac{\bar\ell}{K},\qquad
  v_K(D)=\frac1K\sum_x P_K(x)(\ell(x)-\bar\ell)^2 .\quad}
