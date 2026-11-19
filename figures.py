@@ -9,7 +9,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.colors import ListedColormap
-from model import constant, critical, threshold, words
+from model import constant, critical, nu, threshold, words
 from short_blocks import at_weight, transitions
 
 ROOT = Path(__file__).resolve().parent
@@ -141,38 +141,55 @@ def regimes(out, data):
     write(
         data / "regimes.csv", ["K", "D_full", "D_critical"], zip(ks, ds, [dc] * len(ks))
     )
-    fig, ax = plt.subplots(figsize=(7, 3.5))
-    fig.subplots_adjust(bottom=0.37)
-    ax.fill_between(ks, 0, ds, color="#d8ece6")
-    ax.plot(ks, ds, ".-", color=TEAL, label="Finite-block threshold")
-    ax.axhline(dc, ls="--", color=ORANGE, label="Gray's critical distortion")
-    ax.set(
-        xlim=(2, 24),
-        xticks=[2, 4, 8, 12, 16, 20, 24],
-        ylim=(0, 0.26),
-        xlabel="Block length $K$",
-        ylabel="Distortion $D$",
-    )
-    ax.text(13, 0.035, "Exact entropy and varentropy formulas", ha="center")
-    ax.legend(frameon=False)
-    for j, (tag, desc) in enumerate(
-        [
-            (
-                r"$0<D\leq D_c$",
-                "Variance equals the varentropy rate in the limit; pathwise converse holds.",
-            ),
-            (
-                r"$D_c<D<1/2$",
-                "Positive variance limit at interior differentiability points.",
-            ),
-            (
-                "Operational dispersion",
-                "Equality with the variance limit is conjectured.",
-            ),
-        ]
-    ):
-        fig.text(0.06, 0.20 - 0.073 * j, tag, color=COLORS[j])
-        fig.text(0.33, 0.20 - 0.073 * j, desc, fontsize=8)
+    # Both panels use actual integer block lengths for the same source.
+    variance = nu(p)
+    lengths = np.arange(1, ks[-1] + 1)
+    fig = plt.figure(figsize=(7.35, 3.9))
+    upper = fig.add_axes([0.088, 0.68, 0.396, 0.235])
+    lower = fig.add_axes([0.088, 0.29, 0.396, 0.235])
+    for ax in (upper, lower):
+        ax.set_xlim(0.5, 24.5)
+        ax.set_xticks([2, 8, 16, 24])
+        ax.tick_params(length=2, width=0.7, labelsize=8)
+        ax.spines[["bottom", "left"]].set_color("#667580")
+
+    upper.fill_between(ks, 0, ds, color="#e2f0eb")
+    upper.plot(ks, ds, ".-", color=TEAL, lw=1.5, ms=4)
+    upper.axhline(dc, color="0.30", lw=1, ls="--")
+    upper.set(ylim=(0, 0.255), yticks=[0, 0.1, 0.2], ylabel=r"Distortion $D$")
+    upper.text(9, dc + 0.027, rf"$D_c={dc:.3f}$", color="0.20", fontsize=9)
+    upper.set_xlabel(r"Block length $K$", fontsize=8.5, labelpad=1.5)
+
+    lower.plot(lengths, (1 - 1 / lengths) * variance, ".-", color=BLUE, lw=1.5, ms=4)
+    lower.axhline(variance, color="0.30", lw=1, ls="--")
+    lower.set(ylim=(-0.007, 0.233), yticks=[0, 0.1, 0.2],
+              ylabel=r"$v_K$ (bits$^2$/symbol)")
+    lower.text(8, variance + 0.015, rf"Limit $={variance:.3f}$", color="0.20", fontsize=9)
+    lower.set_xlabel(r"Block length $K$", fontsize=8.5, labelpad=1.5)
+
+    text_x = 0.55
+    fig.text(text_x, 0.90, "When does the exact formula apply?", fontsize=11,
+             fontweight="bold", color=TEAL)
+    fig.text(text_x, 0.848,
+             "The upper edge of the shaded region is the\n"
+             "full-support threshold. As blocks grow, it\n"
+             "falls toward Gray's critical distortion, $D_c$.",
+             fontsize=9.7, va="top", linespacing=1.35)
+    fig.text(text_x, 0.512, "What happens to the variance?", fontsize=11,
+             fontweight="bold", color=BLUE)
+    fig.text(text_x, 0.458,
+             r"At $D=0.05$, $v_K=(1-1/K)\,\nu(p)$." "\n"
+             "A positive limit also exists at every interior\n"
+             r"$D$ where the rate $R(D)$ is differentiable.",
+             fontsize=9.7, va="top", linespacing=1.35)
+    fig.add_artist(plt.Line2D([0.02, 0.985], [0.145, 0.145],
+                              transform=fig.transFigure, color="#a5b2b4", lw=0.8))
+    fig.text(0.023, 0.078, "One Markov path", fontsize=10.7, fontweight="bold",
+             color=ORANGE)
+    fig.text(0.285, 0.104,
+             r"For $0<D\leq D_c$, the limit gives a second-order lower bound on rate." "\n"
+             "Whether codes can attain this coefficient remains open.",
+             fontsize=9.5, va="top", linespacing=1.3)
     save(fig, out, "regimes")
     fig, axes = plt.subplots(1, 2, figsize=(7, 2.8), layout="constrained")
     rows = []
@@ -317,7 +334,7 @@ def short_curves(out, data):
             ax.set(
                 xlim=(0, 0.5),
                 xlabel="Distortion $D$",
-                ylabel=["Rate (bits per symbol)", "Variance (bits² per symbol)"][i],
+                ylabel=["Rate (bits per symbol)", "Variance (bitsÂ² per symbol)"][i],
             )
     axes[0].legend(frameon=False)
     save(fig, out, "shortblocks")
@@ -392,7 +409,7 @@ def varentropy(out, data):
     ax.legend(frameon=False)
     ax.set(
         xlabel="Block length $K$",
-        ylabel="Variance (bits² per symbol)",
+        ylabel="Variance (bitsÂ² per symbol)",
         title="(a) Full-support variance",
     )
     bx.loglog(ks, limit - np.asarray(vs), color=ORANGE, label="Exact gap")

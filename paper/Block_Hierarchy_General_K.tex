@@ -78,48 +78,39 @@ The sum assigns the greatest weight to reproduction symbols near $x$. If the opt
 
 For the symmetric chain in the opening example, the single-letter tilted information is constant. At sufficiently low distortion and $0<p<1/2$, a flip carries $\log_2((1-p)/p)$ more bits of tilted information than a repetition.
 
-\paragraph{The block construction.}
-Consider a single uninterrupted path of the Markov source. Its consecutive $K$-symbol blocks share dependence through the transition at each boundary. Now draw blocks independently, preserving the Markov law within each block (Figure~\ref{fig:construction}). The resulting source is memoryless on an alphabet of $2^K$ binary words, so its tilted-information variance $V_K(KD)$ gives its dispersion under the hypotheses of the memoryless theorem. The \emph{block hierarchy} consists of these sources indexed by $K$ at the same per-symbol distortion $D$. Each boundary accounts for $I_0=I(X_1;X_2)$ bits of dependence, and $0\le r_K(D)-R(D)\le I_0/K$. Does the normalized variance $v_K(D)=V_K(KD)/K$ converge as the blocks grow? If so, does its limit govern the finite-length rate of an uninterrupted Markov path?
-
-
-\begin{figure}[htbp]\centering
-\includegraphics[width=.96\linewidth]{figures/construction.pdf}
+\begin{figure}[!b]\centering
+\includegraphics[width=.92\linewidth]{figures/construction.pdf}
 \caption{Two consecutive blocks of length three. Within either block the symbols follow the transition matrix $P$. Along the path the mutual information between the blocks equals $I(X_3;X_4)=I_0$ by the Markov property. Independent draws from the same three-symbol marginal remove exactly this boundary dependence.}\label{fig:construction}
 \end{figure}
 
+\paragraph{The block construction.}
+Consider a single uninterrupted path of the Markov source. Its consecutive $K$-symbol blocks share dependence through the transition at each boundary. Now draw blocks independently, preserving the Markov law within each block (Figure~\ref{fig:construction}). The resulting source is memoryless on an alphabet of $2^K$ binary words, so its tilted-information variance $V_K(KD)$ gives its dispersion under the hypotheses of the memoryless theorem. The \emph{block hierarchy} consists of these sources indexed by $K$ at the same per-symbol distortion $D$. Each boundary accounts for $I_0=I(X_1;X_2)$ bits of dependence, and $0\le r_K(D)-R(D)\le I_0/K$. Does the normalized variance $v_K(D)=V_K(KD)/K$ converge as the blocks grow? If so, does its limit govern the finite-length rate of an uninterrupted Markov path?
+
+\begin{figure}[!b]\centering
+\includegraphics[width=\linewidth]{figures/regimes.pdf}
+\caption{From finite blocks to one Markov path for a symmetric source with flip probability $p=0.35$. Points represent integer block lengths. The dashed lines give the limiting full-support threshold $D_c$ (top) and the source varentropy rate $\nu(p)$ (bottom).}\label{fig:regimes}
+\end{figure}
 
 The finite-block calculation depends on which words receive positive probability under the optimal reproduction law. These words form its \emph{support}. A \emph{branch} is an interval of distortion with the same support. On the \emph{full-support branch}, all reproduction words have positive probability. For symmetric persistent chains, the full-support thresholds decrease with block length to Gray's critical distortion $D_c$. Up to $D_c$ the entropy formula for the block rate holds at every length. Above $D_c$, longer blocks can lose support at a fixed distortion.
 
+\paragraph{Results.}
+For positively correlated two-symbol blocks we compute the complete rate and variance at any stationary bias. For symmetric three- and four-symbol blocks we identify the support changes and compute both quantities with at most a cubic equation or two scalar searches, respectively (Section~\ref{sec:two}). For larger blocks, one optimization gives both moments, and shorter blocks bound the rate and, for symmetric persistent sources, the variance (Sections~\ref{sec:general} and~\ref{sec:shortvariance}).
+
+Figure~\ref{fig:regimes} follows one symmetric source as the block length grows. At $D=0.05$, every block length lies below its full-support threshold, so the variance curve is exact. Theorem~\ref{thm:common} also establishes convergence beyond that common interval wherever $R$ is differentiable in the interior. Proposition~\ref{prop:converse} relates the low-distortion limit to coding a single path.
+
+\paragraph{Code, data, and proofs.}
+The plotting code for all twelve figures, the finite-block solver, and the numerical data are available at \url{https://github.com/ANRGUSC/markov-block-hierarchy}. The \href{https://github.com/ANRGUSC/markov-block-hierarchy/tree/main/proofs}{Lamport proof companion} gives step-by-step proofs of all ten numbered results and identifies the dependencies used to verify each one.
+
+\paragraph{Relation to prior work.}
 This paper extends the workshop paper and presentation \cite{itw}. They introduced the hierarchy, identified the first two-symbol support change as a function of bias and persistence, and examined varentropy and finite-block numerical behavior.
 
 Earlier versions of this preprint studied single-letter tilted information summed along a Markov path.\footnote{For a biased chain, the centered sum equals the centered count of ones times $\log_2(\pi_0/\pi_1)$, where $\pi_x=\Prb(X_1=x)$.} For a symmetric chain this sum is constant. The present revision studies the fluctuations of successively longer blocks.
 
-We establish the following results.
-\begin{itemize}
-\item \textbf{Two symbols.} Starting from the workshop support map, we derive the complete rate and variance at positive persistence for any stationary bias (Section~\ref{sec:two}).
-\item \textbf{Three and four symbols.} For symmetric sources we give the support thresholds, rate and variance at every distortion. At a given distortion, three symbols require at most one cubic equation and four require two scalar searches (Sections~\ref{sec:three} and~\ref{sec:four}).
-\item \textbf{Arbitrary block length.} A block implementation of the Blahut--Arimoto algorithm gives both moments. We derive exact formulas on the full-support branch and use shorter blocks to bound the rate and, for symmetric persistent chains, the variance (Sections~\ref{sec:general} and~\ref{sec:shortvariance}).
-\item \textbf{Variance limit.} For symmetric persistent chains, $v_K(D)$ converges to a positive limit wherever $R$ is differentiable in the interior (Theorem~\ref{thm:common}).
-\item \textbf{Operational dispersion.} For the same sources we conjecture that the limit is the dispersion in \eqref{eq:iidnormal}. At $0<D\le D_c$ we prove the corresponding converse. Achievability remains open (Section~\ref{sec:operational}).
-\end{itemize}
-
-Figure~\ref{fig:regimes} locates the exact block formula and the operational converse on the same distortion axis.
-
-\paragraph{Code, data, and proofs.}
-The plotting code for all twelve figures, the finite-block solver, and the numerical data are available at \url{https://github.com/ANRGUSC/markov-block-hierarchy}. The repository also provides \href{https://github.com/ANRGUSC/markov-block-hierarchy/tree/main/proofs}{Lamport-style proofs} with intermediate steps and dependencies to assist readers in verifying the arguments.
-
-\paragraph{Relation to prior work.}
 Classical block bounds and Gray's low-distortion results give the first-order rate for sources with memory \cite{gray70,gray71,wynerziv,berger77,jalali}. Blahut computed binary Markov block rates through length ten \cite{blahut}. For each fixed block length, the independent-block construction also brings memoryless finite-blocklength theory to bear \cite{ik,kv,zhoumotani}. This theory draws on the normal-approximation tradition in information theory \cite{strassen,ppv}. In particular, Kostina \cite{kostina17} relates a tight Shannon lower bound to dispersion equal to source varentropy, the variance of the source self-information. This accounts for the variance formula on our full-support branch.
 
 For a single Markov path, lossless coding theory connects varentropy to Gaussian approximation bounds \cite{kontoverdu}. Related second-order results cover Markov source coding with decoder side information and channels with Markov noise \cite{hayashi}. In lossy coding, the dispersion is known for Gauss--Markov sources under squared error and for more general Gaussian sources \cite{tian,tasci}. The corresponding identification for a binary Markov path under Hamming distortion remains open in general.
 
 The achievability question concerns the probability that a random reproduction word falls within the distortion budget of a source path. Kontoyiannis \cite{konto00} studied pointwise redundancy for variable-length lossy coding using a fluctuation term that, after centering, agrees with tilted information in the memoryless setting. Kontoyiannis and Zhang \cite{kz02} gave direct and converse bounds for arbitrary sources in terms of reproduction probability measures. Section~\ref{sec:conclusion} describes the distortion-ball estimate needed here.
-
-
-\begin{figure}[htbp]\centering
-\includegraphics[width=.97\linewidth]{figures/regimes.pdf}
-\caption{Finite-block and limiting regimes for a symmetric chain with $p=0.35$. The shaded region is $D\le D_{\rm FS}(K)$, including the first threshold by continuity. The dashed line marks $D_c$. The limit and converse concern fixed distortion as $K$ grows.}\label{fig:regimes}
-\end{figure}
 
 \section{Block rate, tilted information, and dispersion}\label{sec:setup}
 Let $X_1,X_2,\ldots$ be a stationary binary Markov chain with transition matrix $P$, stationary law $\pi$, and persistence $\rho$ given by
@@ -375,8 +366,6 @@ On this branch, the total input probabilities of the constant, odd-weight, and w
 \[
  4D=S_0\frac{4u^4}{1+u^4}+S_1\left(1+\frac{2u^2}{1+u^2}\right)+2S_2 .
 \]
-
-
 
 
 \begin{figure}[!htb]\centering
@@ -684,6 +673,31 @@ Even at $0<D\le D_c$, the explicit optimal reproduction law $q_D$ in \eqref{eq:i
 \paragraph{Acknowledgment.}
 The author used Claude Code, ChatGPT, Gemini, and Grok to help draft and revise the manuscript, develop derivations, check numerical results, and prepare figures. The human author accepts full responsibility for its contents.
 
+\begin{thebibliography}{99}\small
+\bibitem{berger71} T. Berger, \emph{Rate Distortion Theory: A Mathematical Basis for Data Compression}. Prentice-Hall, Englewood Cliffs, NJ, 1971.
+\bibitem{gray71} R. M. Gray, \emph{Rate distortion functions for finite-state finite-alphabet Markov sources}. IEEE Transactions on Information Theory, 17(2), 127--134, 1971.
+\bibitem{wynerziv} A. D. Wyner and J. Ziv, \emph{Bounds on the rate-distortion function for stationary sources with memory}. IEEE Transactions on Information Theory, 17(5), 508--513, 1971.
+\bibitem{ik} A. Ingber and Y. Kochman, \emph{The dispersion of lossy source coding}. Data Compression Conference, 53--62, 2011.
+\bibitem{kv} V. Kostina and S. Verd\'u, \emph{Fixed-length lossy compression in the finite blocklength regime}. IEEE Transactions on Information Theory, 58(6), 3309--3338, 2012. \href{https://doi.org/10.1109/TIT.2012.2186786}{doi:10.1109/TIT.2012.2186786}.
+\bibitem{konto00} I. Kontoyiannis, \emph{Pointwise redundancy in lossy data compression and universal lossy data compression}. IEEE Transactions on Information Theory, 46(1), 136--152, 2000. \href{https://doi.org/10.1109/18.817514}{doi:10.1109/18.817514}.
+\bibitem{kz02} I. Kontoyiannis and J. Zhang, \emph{Arbitrary source models and Bayesian codebooks in rate-distortion theory}. IEEE Transactions on Information Theory, 48(8), 2276--2290, 2002. \href{https://doi.org/10.1109/TIT.2002.800493}{doi:10.1109/TIT.2002.800493}.
+\bibitem{strassen} V. Strassen, \emph{Asymptotische Absch\"atzungen in Shannons Informationstheorie}. Transactions of the Third Prague Conference on Information Theory, Statistical Decision Functions, Random Processes, 689--723, 1962.
+\bibitem{ppv} Y. Polyanskiy, H. V. Poor, and S. Verd\'u, \emph{Channel coding rate in the finite blocklength regime}. IEEE Transactions on Information Theory, 56(5), 2307--2359, 2010. \href{https://doi.org/10.1109/TIT.2010.2043769}{doi:10.1109/TIT.2010.2043769}.
+\bibitem{kostina17} V. Kostina, \emph{Data compression with low distortion and finite blocklength}. IEEE Transactions on Information Theory, 63(7), 4268--4285, 2017. \href{https://doi.org/10.1109/TIT.2017.2676811}{doi:10.1109/TIT.2017.2676811}.
+\bibitem{zhoumotani} L. Zhou and M. Motani, \emph{Finite blocklength lossy source coding for discrete memoryless sources}. Foundations and Trends in Communications and Information Theory, 20(3), 157--389, 2023. \href{https://doi.org/10.1561/0100000134}{doi:10.1561/0100000134}.
+\bibitem{kontoverdu} I. Kontoyiannis and S. Verd\'u, \emph{Optimal lossless data compression: Non-asymptotics and asymptotics}. IEEE Transactions on Information Theory, 60(2), 777--795, 2014. \href{https://doi.org/10.1109/TIT.2013.2291007}{doi:10.1109/TIT.2013.2291007}.
+\bibitem{hayashi} M. Hayashi and S. Watanabe, \emph{Finite-length analyses for source and channel coding on Markov chains}. Entropy, 22(4), article 460, 2020. \href{https://doi.org/10.3390/e22040460}{doi:10.3390/e22040460}.
+\bibitem{tian} P. Tian and V. Kostina, \emph{The dispersion of the Gauss--Markov source}. IEEE Transactions on Information Theory, 65(10), 6355--6384, 2019. \href{https://arxiv.org/abs/1804.09418}{arXiv:1804.09418}.
+\bibitem{tasci} E. Ta\c{s}c{\i} and V. Kostina, \emph{Dispersion of Gaussian sources with memory and an extension to abstract sources}. 2026. \href{https://arxiv.org/abs/2602.09176}{arXiv:2602.09176}.
+\bibitem{itw} B. Krishnamachari, \emph{A block $d$-tilted information hierarchy for binary Markov sources under Hamming distortion}. IEEE Information Theory Workshop, Tempe, Arizona, November 2026. Conference paper and accompanying oral presentation.
+\bibitem{gray70} R. M. Gray, \emph{Information rates of autoregressive processes}. IEEE Transactions on Information Theory, 16(4), 412--421, 1970.
+\bibitem{berger77} T. Berger, \emph{Explicit bounds to $R(D)$ for a binary symmetric Markov source}. IEEE Transactions on Information Theory, 23(1), 52--59, 1977.
+\bibitem{jalali} S. Jalali and T. Weissman, \emph{New bounds on the rate-distortion function of a binary Markov source}. IEEE International Symposium on Information Theory, 571--575, 2007.
+\bibitem{blahut} R. E. Blahut, \emph{Computation of channel capacity and rate-distortion functions}. IEEE Transactions on Information Theory, 18(4), 460--473, 1972.
+\bibitem{gordin} M. I. Gordin, \emph{The central limit theorem for stationary processes}. Doklady Akademii Nauk SSSR, 188(4), 739--741, 1969 (in Russian).
+\bibitem{bolthausen} E. Bolthausen, \emph{The Berry--Esseen theorem for functionals of discrete Markov chains}. Zeitschrift f\"ur Wahrscheinlichkeitstheorie und Verwandte Gebiete, 54(1), 59--73, 1980. \href{https://doi.org/10.1007/BF00535354}{doi:10.1007/BF00535354}.
+\end{thebibliography}
+
 \appendix
 
 \section{Finite-block calculations and numerical methods}\label{app:short}
@@ -823,29 +837,4 @@ For an additive tolerance $\delta_v$, double $b=j$ until the interval in \eqref{
 If $R$ is differentiable at every interior distortion, the cutoff for additive precision can be taken uniformly in $K,D$ at fixed $p$. Use the exact formula below $D_c$ and the compact multiplier interval $[0,\ln((1-D_c)/D_c)]$ above it. At $D=1/2$ the uniform prior gives $f(\tau)\le-\ln[(1+e^{-\tau})/2]<\tau/2$ for $\tau>0$, so zero is the unique maximizer there. By compactness and \eqref{eq:redun}, two separated near-maximizers along any subsequence would yield two limiting maximizers at the same distortion. Hence the diameters of $I_j(D)$ shrink uniformly. Continuity and \eqref{eq:common} then force the enclosure widths to vanish uniformly for $K\ge j$. This guarantees additive error $\delta_v K$ for the total variance. Fixed absolute accuracy on the total requires per-symbol precision of order $1/K$.
 
 For $K=1$ the source is a fair bit and $v_1(D)=0$ exactly. For $K\ge2$, the midpoint of the bit-unit interval $[L,U]$ attains relative error at most $\eta$ once $L>0$ and $U-L\le2\eta L$. At a fixed interior distortion where $R$ is differentiable, the enclosure width tends to zero and Theorem~\ref{thm:common} gives a positive limiting variance. The lower endpoint is then bounded away from zero for sufficiently large probe and block lengths, so the relative-error rule has a finite cutoff.
-
-\begin{thebibliography}{99}\small
-\bibitem{berger71} T. Berger, \emph{Rate Distortion Theory: A Mathematical Basis for Data Compression}. Prentice-Hall, Englewood Cliffs, NJ, 1971.
-\bibitem{gray71} R. M. Gray, \emph{Rate distortion functions for finite-state finite-alphabet Markov sources}. IEEE Transactions on Information Theory, 17(2), 127--134, 1971.
-\bibitem{wynerziv} A. D. Wyner and J. Ziv, \emph{Bounds on the rate-distortion function for stationary sources with memory}. IEEE Transactions on Information Theory, 17(5), 508--513, 1971.
-\bibitem{ik} A. Ingber and Y. Kochman, \emph{The dispersion of lossy source coding}. Data Compression Conference, 53--62, 2011.
-\bibitem{kv} V. Kostina and S. Verd\'u, \emph{Fixed-length lossy compression in the finite blocklength regime}. IEEE Transactions on Information Theory, 58(6), 3309--3338, 2012. \href{https://doi.org/10.1109/TIT.2012.2186786}{doi:10.1109/TIT.2012.2186786}.
-\bibitem{konto00} I. Kontoyiannis, \emph{Pointwise redundancy in lossy data compression and universal lossy data compression}. IEEE Transactions on Information Theory, 46(1), 136--152, 2000. \href{https://doi.org/10.1109/18.817514}{doi:10.1109/18.817514}.
-\bibitem{kz02} I. Kontoyiannis and J. Zhang, \emph{Arbitrary source models and Bayesian codebooks in rate-distortion theory}. IEEE Transactions on Information Theory, 48(8), 2276--2290, 2002. \href{https://doi.org/10.1109/TIT.2002.800493}{doi:10.1109/TIT.2002.800493}.
-\bibitem{strassen} V. Strassen, \emph{Asymptotische Absch\"atzungen in Shannons Informationstheorie}. Transactions of the Third Prague Conference on Information Theory, Statistical Decision Functions, Random Processes, 689--723, 1962.
-\bibitem{ppv} Y. Polyanskiy, H. V. Poor, and S. Verd\'u, \emph{Channel coding rate in the finite blocklength regime}. IEEE Transactions on Information Theory, 56(5), 2307--2359, 2010. \href{https://doi.org/10.1109/TIT.2010.2043769}{doi:10.1109/TIT.2010.2043769}.
-\bibitem{kostina17} V. Kostina, \emph{Data compression with low distortion and finite blocklength}. IEEE Transactions on Information Theory, 63(7), 4268--4285, 2017. \href{https://doi.org/10.1109/TIT.2017.2676811}{doi:10.1109/TIT.2017.2676811}.
-\bibitem{zhoumotani} L. Zhou and M. Motani, \emph{Finite blocklength lossy source coding for discrete memoryless sources}. Foundations and Trends in Communications and Information Theory, 20(3), 157--389, 2023. \href{https://doi.org/10.1561/0100000134}{doi:10.1561/0100000134}.
-\bibitem{kontoverdu} I. Kontoyiannis and S. Verd\'u, \emph{Optimal lossless data compression: Non-asymptotics and asymptotics}. IEEE Transactions on Information Theory, 60(2), 777--795, 2014. \href{https://doi.org/10.1109/TIT.2013.2291007}{doi:10.1109/TIT.2013.2291007}.
-\bibitem{hayashi} M. Hayashi and S. Watanabe, \emph{Finite-length analyses for source and channel coding on Markov chains}. Entropy, 22(4), article 460, 2020. \href{https://doi.org/10.3390/e22040460}{doi:10.3390/e22040460}.
-\bibitem{tian} P. Tian and V. Kostina, \emph{The dispersion of the Gauss--Markov source}. IEEE Transactions on Information Theory, 65(10), 6355--6384, 2019. \href{https://arxiv.org/abs/1804.09418}{arXiv:1804.09418}.
-\bibitem{tasci} E. Ta\c{s}c{\i} and V. Kostina, \emph{Dispersion of Gaussian sources with memory and an extension to abstract sources}. 2026. \href{https://arxiv.org/abs/2602.09176}{arXiv:2602.09176}.
-\bibitem{itw} B. Krishnamachari, \emph{A block $d$-tilted information hierarchy for binary Markov sources under Hamming distortion}. IEEE Information Theory Workshop, Tempe, Arizona, November 2026. Conference paper and accompanying oral presentation.
-\bibitem{gray70} R. M. Gray, \emph{Information rates of autoregressive processes}. IEEE Transactions on Information Theory, 16(4), 412--421, 1970.
-\bibitem{berger77} T. Berger, \emph{Explicit bounds to $R(D)$ for a binary symmetric Markov source}. IEEE Transactions on Information Theory, 23(1), 52--59, 1977.
-\bibitem{jalali} S. Jalali and T. Weissman, \emph{New bounds on the rate-distortion function of a binary Markov source}. IEEE International Symposium on Information Theory, 571--575, 2007.
-\bibitem{blahut} R. E. Blahut, \emph{Computation of channel capacity and rate-distortion functions}. IEEE Transactions on Information Theory, 18(4), 460--473, 1972.
-\bibitem{gordin} M. I. Gordin, \emph{The central limit theorem for stationary processes}. Doklady Akademii Nauk SSSR, 188(4), 739--741, 1969 (in Russian).
-\bibitem{bolthausen} E. Bolthausen, \emph{The Berry--Esseen theorem for functionals of discrete Markov chains}. Zeitschrift f\"ur Wahrscheinlichkeitstheorie und Verwandte Gebiete, 54(1), 59--73, 1980. \href{https://doi.org/10.1007/BF00535354}{doi:10.1007/BF00535354}.
-\end{thebibliography}
 \end{document}

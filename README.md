@@ -33,7 +33,7 @@ The second command also recomputes all 36 six-source variance values and the 15 
 | Figure | Calculation or diagram | Implementation or data |
 | --- | --- | --- |
 | 1 | Dependence across a boundary between two three-symbol blocks | `diagrams` in [figures.py](figures.py) |
-| 2 | Full-support thresholds through length 24 and Gray's limiting critical distortion | `feasible` and `threshold` in [model.py](model.py) |
+| 2 | Full-support thresholds, the exact low-distortion variance curve, and the one-path coding result | `regimes` in [figures.py](figures.py), with `threshold` and `nu` in [model.py](model.py) |
 | 3 | First loss of two-symbol support in bias/persistence and transition-probability coordinates | `support` in [figures.py](figures.py) |
 | 4 | Four-symbol support ladder at flip probability 0.1 | Class allocation and transition searches in [short_blocks.py](short_blocks.py) |
 | 5 | Per-symbol rate and variance curves through four symbols, including support-change markers | [short_blocks.py](short_blocks.py) |
