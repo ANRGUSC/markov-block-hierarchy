@@ -87,24 +87,24 @@ For the symmetric chain in the opening example, the single-letter tilted informa
 Consider a single uninterrupted path of the Markov source. Its consecutive $K$-symbol blocks share dependence through the transition at each boundary. Now draw blocks independently, preserving the Markov law within each block (Figure~\ref{fig:construction}). The resulting source is memoryless on an alphabet of $2^K$ binary words, so its tilted-information variance $V_K(KD)$ gives its dispersion under the hypotheses of the memoryless theorem. The \emph{block hierarchy} consists of these sources indexed by $K$ at the same per-symbol distortion $D$. Each boundary accounts for $I_0=I(X_1;X_2)$ bits of dependence, and $0\le r_K(D)-R(D)\le I_0/K$. Does the normalized variance $v_K(D)=V_K(KD)/K$ converge as the blocks grow? If so, does its limit govern the finite-length rate of an uninterrupted Markov path?
 
 \begin{figure}[!b]\centering
+\includegraphics[width=\linewidth]{figures/overview.pdf}
+\caption{Results of this paper at a glance.}\label{fig:overview}
+\end{figure}
+
+\paragraph{Results.}
+Figure~\ref{fig:overview} traces the two quantities obtained from each block, the rate and the tilted-information variance, from short words to the limit of long blocks. For positively correlated two-symbol blocks we compute the complete rate and variance at any stationary bias. For symmetric three- and four-symbol blocks we identify the support changes and compute both quantities with at most a cubic equation or two scalar searches, respectively (Section~\ref{sec:two}).
+
+For larger blocks, one optimization gives both moments, and shorter blocks bound the rate and, for symmetric persistent sources, the variance (Sections~\ref{sec:general} and~\ref{sec:shortvariance}). The finite-block calculation depends on which words receive positive probability under the optimal reproduction law. These words form its \emph{support}. A \emph{branch} is an interval of distortion with the same support. On the \emph{full-support branch}, all reproduction words have positive probability. For symmetric persistent chains, the full-support thresholds decrease with block length to Gray's critical distortion $D_c$. Up to $D_c$ the entropy formula for the block rate holds at every length. Above $D_c$, longer blocks can lose support at a fixed distortion.
+
+Figure~\ref{fig:regimes} follows one symmetric source as the block length grows. At $D=0.05$, every block length lies below its full-support threshold, so the variance curve is exact. Theorem~\ref{thm:common} also establishes convergence beyond that common interval wherever $R$ is differentiable in the interior. Proposition~\ref{prop:converse} relates the low-distortion limit to coding a single path.
+
+\begin{figure}[!htbp]\centering
 \includegraphics[width=\linewidth]{figures/regimes.pdf}
 \caption{From finite blocks to one Markov path for a symmetric source with flip probability $p=0.35$. Points represent integer block lengths. The dashed lines give the limiting full-support threshold $D_c$ (top) and the source varentropy rate $\nu(p)$ (bottom).}\label{fig:regimes}
 \end{figure}
 
-The finite-block calculation depends on which words receive positive probability under the optimal reproduction law. These words form its \emph{support}. A \emph{branch} is an interval of distortion with the same support. On the \emph{full-support branch}, all reproduction words have positive probability. For symmetric persistent chains, the full-support thresholds decrease with block length to Gray's critical distortion $D_c$. Up to $D_c$ the entropy formula for the block rate holds at every length. Above $D_c$, longer blocks can lose support at a fixed distortion.
-
-\paragraph{Results.}
-Figure~\ref{fig:overview} traces the two quantities obtained from each block, the rate and the tilted-information variance, from short words to the limit of long blocks. For positively correlated two-symbol blocks we compute the complete rate and variance at any stationary bias. For symmetric three- and four-symbol blocks we identify the support changes and compute both quantities with at most a cubic equation or two scalar searches, respectively (Section~\ref{sec:two}). For larger blocks, one optimization gives both moments, and shorter blocks bound the rate and, for symmetric persistent sources, the variance (Sections~\ref{sec:general} and~\ref{sec:shortvariance}).
-
-Figure~\ref{fig:regimes} follows one symmetric source as the block length grows. At $D=0.05$, every block length lies below its full-support threshold, so the variance curve is exact. Theorem~\ref{thm:common} also establishes convergence beyond that common interval wherever $R$ is differentiable in the interior. Proposition~\ref{prop:converse} relates the low-distortion limit to coding a single path.
-
 \paragraph{Code, data, and proofs.}
 The plotting code for all thirteen figures, the finite-block solver, and the numerical data are available at \url{https://github.com/ANRGUSC/markov-block-hierarchy}. The \href{https://github.com/ANRGUSC/markov-block-hierarchy/tree/main/proofs}{Lamport proof companion} gives step-by-step proofs of all ten numbered results and identifies the dependencies used to verify each one.
-
-\begin{figure}[!htbp]\centering
-\includegraphics[width=\linewidth]{figures/overview.pdf}
-\caption{Results of this paper at a glance.}\label{fig:overview}
-\end{figure}
 
 \paragraph{Relation to prior work.}
 This paper extends the workshop paper and presentation \cite{itw}. They introduced the hierarchy, identified the first two-symbol support change as a function of bias and persistence, and examined varentropy and finite-block numerical behavior.

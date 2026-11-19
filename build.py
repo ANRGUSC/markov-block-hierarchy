@@ -36,8 +36,8 @@ from short_blocks import at_weight
 
 NAMES = [
     "construction",
-    "regimes",
     "overview",
+    "regimes",
     "support",
     "ladder",
     "shortblocks",
